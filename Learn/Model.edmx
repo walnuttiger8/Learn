@@ -1,0 +1,393 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище LearnModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Clients">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MiddleName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="BirthDate" Type="date" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="RegisterDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Photos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ImagePath" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="ImageData" Type="varbinary(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ServiceClients">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ServiceId" Type="int" Nullable="false" />
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="ServiceStartDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ServicePhotos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ServiceId" Type="int" />
+          <Property Name="PhotoId" Type="int" />
+        </EntityType>
+        <EntityType Name="Services">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ServiceName" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="DurationMinutes" Type="int" Nullable="false" />
+          <Property Name="Cost" Type="int" Nullable="false" />
+          <Property Name="MainImageId" Type="int" Nullable="false" />
+          <Property Name="CurrentDiscount" Type="int" />
+        </EntityType>
+        <Association Name="FK__ServiceCl__Clien__59FA5E80">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ServiceClients" Type="Self.ServiceClients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ServiceClients">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ServiceCl__Servi__59063A47">
+          <End Role="Services" Type="Self.Services" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ServiceClients" Type="Self.ServiceClients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Services">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ServiceClients">
+              <PropertyRef Name="ServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ServicePh__Photo__2645B050">
+          <End Role="Photos" Type="Self.Photos" Multiplicity="0..1" />
+          <End Role="ServicePhotos" Type="Self.ServicePhotos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Photos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ServicePhotos">
+              <PropertyRef Name="PhotoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ServicePh__Servi__25518C17">
+          <End Role="Services" Type="Self.Services" Multiplicity="0..1" />
+          <End Role="ServicePhotos" Type="Self.ServicePhotos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Services">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ServicePhotos">
+              <PropertyRef Name="ServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Services__MainIm__52593CB8">
+          <End Role="Photos" Type="Self.Photos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Services" Type="Self.Services" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Photos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Services">
+              <PropertyRef Name="MainImageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище LearnModelContainer">
+          <EntitySet Name="Clients" EntityType="Self.Clients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Photos" EntityType="Self.Photos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ServiceClients" EntityType="Self.ServiceClients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ServicePhotos" EntityType="Self.ServicePhotos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Services" EntityType="Self.Services" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__ServiceCl__Clien__59FA5E80" Association="Self.FK__ServiceCl__Clien__59FA5E80">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="ServiceClients" EntitySet="ServiceClients" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ServiceCl__Servi__59063A47" Association="Self.FK__ServiceCl__Servi__59063A47">
+            <End Role="Services" EntitySet="Services" />
+            <End Role="ServiceClients" EntitySet="ServiceClients" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ServicePh__Photo__2645B050" Association="Self.FK__ServicePh__Photo__2645B050">
+            <End Role="Photos" EntitySet="Photos" />
+            <End Role="ServicePhotos" EntitySet="ServicePhotos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ServicePh__Servi__25518C17" Association="Self.FK__ServicePh__Servi__25518C17">
+            <End Role="Services" EntitySet="Services" />
+            <End Role="ServicePhotos" EntitySet="ServicePhotos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Services__MainIm__52593CB8" Association="Self.FK__Services__MainIm__52593CB8">
+            <End Role="Photos" EntitySet="Photos" />
+            <End Role="Services" EntitySet="Services" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LearnModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Clients">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BirthDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Email" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ServiceClients" Relationship="Self.FK__ServiceCl__Clien__59FA5E80" FromRole="Clients" ToRole="ServiceClients" />
+        </EntityType>
+        <EntityType Name="Photos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ImagePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ImageData" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <NavigationProperty Name="ServicePhotos" Relationship="Self.FK__ServicePh__Photo__2645B050" FromRole="Photos" ToRole="ServicePhotos" />
+          <NavigationProperty Name="Services" Relationship="Self.FK__Services__MainIm__52593CB8" FromRole="Photos" ToRole="Services" />
+        </EntityType>
+        <EntityType Name="ServiceClients">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ServiceId" Type="Int32" Nullable="false" />
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="ServiceStartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Clients" Relationship="Self.FK__ServiceCl__Clien__59FA5E80" FromRole="ServiceClients" ToRole="Clients" />
+          <NavigationProperty Name="Services" Relationship="Self.FK__ServiceCl__Servi__59063A47" FromRole="ServiceClients" ToRole="Services" />
+        </EntityType>
+        <EntityType Name="ServicePhotos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ServiceId" Type="Int32" />
+          <Property Name="PhotoId" Type="Int32" />
+          <NavigationProperty Name="Photos" Relationship="Self.FK__ServicePh__Photo__2645B050" FromRole="ServicePhotos" ToRole="Photos" />
+          <NavigationProperty Name="Services" Relationship="Self.FK__ServicePh__Servi__25518C17" FromRole="ServicePhotos" ToRole="Services" />
+        </EntityType>
+        <EntityType Name="Services">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ServiceName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DurationMinutes" Type="Int32" Nullable="false" />
+          <Property Name="Cost" Type="Int32" Nullable="false" />
+          <Property Name="MainImageId" Type="Int32" Nullable="false" />
+          <Property Name="CurrentDiscount" Type="Int32" />
+          <NavigationProperty Name="Photos" Relationship="Self.FK__Services__MainIm__52593CB8" FromRole="Services" ToRole="Photos" />
+          <NavigationProperty Name="ServiceClients" Relationship="Self.FK__ServiceCl__Servi__59063A47" FromRole="Services" ToRole="ServiceClients" />
+          <NavigationProperty Name="ServicePhotos" Relationship="Self.FK__ServicePh__Servi__25518C17" FromRole="Services" ToRole="ServicePhotos" />
+        </EntityType>
+        <Association Name="FK__ServiceCl__Clien__59FA5E80">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ServiceClients" Type="Self.ServiceClients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ServiceClients">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ServicePh__Photo__2645B050">
+          <End Role="Photos" Type="Self.Photos" Multiplicity="0..1" />
+          <End Role="ServicePhotos" Type="Self.ServicePhotos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Photos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ServicePhotos">
+              <PropertyRef Name="PhotoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Services__MainIm__52593CB8">
+          <End Role="Photos" Type="Self.Photos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Services" Type="Self.Services" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Photos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Services">
+              <PropertyRef Name="MainImageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ServiceCl__Servi__59063A47">
+          <End Role="Services" Type="Self.Services" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ServiceClients" Type="Self.ServiceClients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Services">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ServiceClients">
+              <PropertyRef Name="ServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ServicePh__Servi__25518C17">
+          <End Role="Services" Type="Self.Services" Multiplicity="0..1" />
+          <End Role="ServicePhotos" Type="Self.ServicePhotos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Services">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ServicePhotos">
+              <PropertyRef Name="ServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LearnEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clients" EntityType="Self.Clients" />
+          <EntitySet Name="Photos" EntityType="Self.Photos" />
+          <EntitySet Name="ServiceClients" EntityType="Self.ServiceClients" />
+          <EntitySet Name="ServicePhotos" EntityType="Self.ServicePhotos" />
+          <EntitySet Name="Services" EntityType="Self.Services" />
+          <AssociationSet Name="FK__ServiceCl__Clien__59FA5E80" Association="Self.FK__ServiceCl__Clien__59FA5E80">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="ServiceClients" EntitySet="ServiceClients" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ServicePh__Photo__2645B050" Association="Self.FK__ServicePh__Photo__2645B050">
+            <End Role="Photos" EntitySet="Photos" />
+            <End Role="ServicePhotos" EntitySet="ServicePhotos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Services__MainIm__52593CB8" Association="Self.FK__Services__MainIm__52593CB8">
+            <End Role="Photos" EntitySet="Photos" />
+            <End Role="Services" EntitySet="Services" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ServiceCl__Servi__59063A47" Association="Self.FK__ServiceCl__Servi__59063A47">
+            <End Role="Services" EntitySet="Services" />
+            <End Role="ServiceClients" EntitySet="ServiceClients" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ServicePh__Servi__25518C17" Association="Self.FK__ServicePh__Servi__25518C17">
+            <End Role="Services" EntitySet="Services" />
+            <End Role="ServicePhotos" EntitySet="ServicePhotos" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище LearnModelContainer" CdmEntityContainer="LearnEntities">
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="LearnModel.Clients">
+              <MappingFragment StoreEntitySet="Clients">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Photos">
+            <EntityTypeMapping TypeName="LearnModel.Photos">
+              <MappingFragment StoreEntitySet="Photos">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="ImageData" ColumnName="ImageData" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ServiceClients">
+            <EntityTypeMapping TypeName="LearnModel.ServiceClients">
+              <MappingFragment StoreEntitySet="ServiceClients">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="ServiceStartDate" ColumnName="ServiceStartDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ServicePhotos">
+            <EntityTypeMapping TypeName="LearnModel.ServicePhotos">
+              <MappingFragment StoreEntitySet="ServicePhotos">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+                <ScalarProperty Name="PhotoId" ColumnName="PhotoId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Services">
+            <EntityTypeMapping TypeName="LearnModel.Services">
+              <MappingFragment StoreEntitySet="Services">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ServiceName" ColumnName="ServiceName" />
+                <ScalarProperty Name="DurationMinutes" ColumnName="DurationMinutes" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="MainImageId" ColumnName="MainImageId" />
+                <ScalarProperty Name="CurrentDiscount" ColumnName="CurrentDiscount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

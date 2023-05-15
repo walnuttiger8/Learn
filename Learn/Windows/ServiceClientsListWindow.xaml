@@ -1,0 +1,40 @@
+﻿<Window x:Class="Learn.Windows.ServiceClientsListWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Learn.Windows"
+        xmlns:global="clr-namespace:Learn"
+        mc:Ignorable="d"
+        Title="Ближайшие записи" Height="450" Width="800" Loaded="Window_Loaded">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <TextBlock Text="Последнее обновление: "/>
+            <TextBlock Text="Сегодня" x:Name="lastUpdateDate"/>
+        </StackPanel>
+        <ListView x:Name="serviceClients" Grid.Row="1">
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="{x:Type global:ServiceClients}">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Services.ServiceName}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Clients.LastName}"/>
+                            <TextBlock Text=" "/>
+                            <TextBlock Text="{Binding Clients.FirstName}"/>
+                            <TextBlock Text=" "/>
+                            <TextBlock Text="{Binding Clients.MiddleName}"/>
+                        </StackPanel>
+                        <TextBlock Text="{Binding Clients.Email}"/>
+                        <TextBlock Text="{Binding Clients.PhoneNumber}"/>
+                        <TextBlock Text="{Binding ServiceStartDate}"/>
+                        <TextBlock Text="2 часа 5 минут" x:Name="leftUntil" Initialized="leftUntil_Initialized"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Window>

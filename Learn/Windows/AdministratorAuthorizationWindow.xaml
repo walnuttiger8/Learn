@@ -1,0 +1,15 @@
+﻿<Window x:Class="Learn.Windows.AdministratorAuthorizationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Learn.Windows"
+        mc:Ignorable="d"
+        Title="Авторизация администратора" Height="250" Width="400">
+    <Grid Margin="5">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <PasswordBox Width="200" FontSize="24" x:Name="password"/>
+            <Button Content="Подтвердить" Margin="0 20" FontSize="20" x:Name="confirm" Click="confirm_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,95 @@
+﻿<Window x:Class="Learn.Windows.ServicesListWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Learn.Windows"
+        xmlns:converters="clr-namespace:Learn.Converters"
+        mc:Ignorable="d"
+        Title="Список услуг" Height="450" Width="800">
+    <Window.Resources>
+        <converters:ByteArrayToBitmapImage x:Key="byteArrayToImageConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition MaxHeight="80"/>
+            <RowDefinition/>
+            <RowDefinition MaxHeight="15"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Margin="2 25" x:Name="searchText" TextChanged="searchText_TextChanged"/>
+            <ComboBox Grid.Column="1" Width="130" Height="25" SelectedIndex="1" x:Name="costSort" SelectionChanged="costSort_SelectionChanged">
+                <TextBlock Text="По возрастанию"/>
+                <TextBlock Text="По убыванию"/>
+            </ComboBox>
+            <ComboBox Grid.Column="2" Width="150" Height="25" x:Name="filter" SelectedIndex="0" SelectionChanged="filter_SelectionChanged">
+                <TextBlock Text="Все"/>
+                <TextBlock Text="0 до 5%"/>
+                <TextBlock Text="от 5% до 15%"/>
+                <TextBlock Text="от 15% до 30%"/>
+                <TextBlock Text="от 30% до 70%"/>
+                <TextBlock Text="от 70% до 100%"/>
+            </ComboBox>
+            <StackPanel Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button Content="Ближайшие записи" x:Name="recentServiceClients" Margin="5" Click="recentServiceClients_Click"/>
+                <Button Content="Назад" x:Name="back" Margin="5" Click="back_Click"/>
+            </StackPanel>
+        </Grid>
+        <ListView x:Name="services" Grid.Row="1">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="500" Height="150">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Margin="5"/>
+                        <Image Grid.Column="0" Margin="5" x:Name="serviceImage" Source="{Binding Photos.ImageData, Converter={StaticResource byteArrayToImageConverter}}"/>
+                        <Grid Grid.Column="1" Margin="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition MaxHeight="40"/>
+                                <RowDefinition MaxHeight="30"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="20"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="{ Binding ServiceName }" FontSize="14" TextWrapping="Wrap"/>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <TextBlock FontSize="14"  Text="{Binding Cost}" x:Name="cost" Initialized="cost_Initialized"/>
+                                <TextBlock FontSize="14" x:Name="discountedPrice" Text="900" Margin="2 0 0 0" Visibility="Collapsed" Initialized="TextBlock_Initialized"/>
+                                <TextBlock FontSize="14"  Text=" рублей за "/>
+                                <TextBlock FontSize="14"  Text="{ Binding DurationMinutes }"/>
+                                <TextBlock FontSize="14"  Text=" минут"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" Initialized="StackPanel_Initialized">
+                                <TextBlock Text="* Скидка "/>
+                                <TextBlock Text="{Binding CurrentDiscount}"/>
+                                <TextBlock Text="%"/>
+                            </StackPanel>
+                            <Grid Grid.Row="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Button Grid.Column="0" Content="Редактировать" x:Name="edit" Click="edit_Click" Initialized="edit_Initialized"/>
+                                <Button Grid.Column="1" Content="Удалить" Margin="2 0 0 0" x:Name="delete" Click="delete_Click" Initialized="delete_Initialized"/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left">
+            <TextBlock Text="100" x:Name="currentCount"/>
+            <TextBlock Text=" из "/>
+            <TextBlock Text="100" x:Name="totalCount"/>
+        </StackPanel>
+    </Grid>
+</Window>
